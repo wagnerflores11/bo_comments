@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  app:
+    container_name: comments-app
+    build: .
+    ports:
+      - 3002:3000
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    # volumes:
+    #   - .:/home/node/app
+    links:
+      - db
+    depends_on:
+      - db
+  #   networks:
+  #     - blueotter
+
+  db:
+    container_name: comments-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+    ports:
+      - '5435:5432'
+#     networks:
+#       - blueotter
+
+# networks:
+#   blueotter:
+#     name: blueotter_network
+#     driver: bridge
+#     external: true
